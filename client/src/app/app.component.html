@@ -1,0 +1,96 @@
+<section class="mt-2 w-full text-center flex justify-center">
+  <div class="pmax-w-lg p-5 border-2 border-blue-500 rounded-md">
+    <h1>Seja bem vindo ao <b class="text-blue-500">PETEG!</b></h1>
+  </div>
+</section>
+
+<section class="w-full text-center mt-3">
+  <span>Um espaço pra você compartilhar fotos de pets da ETEG</span>
+  <div>
+    <span>Confira abaixo imagens dos pets da ETEG:</span>
+  </div>
+  <div class="w-full flex justify-center mt-3">
+    <div class="w-full max-w-lg p-4 space-x-4 carousel carousel-center bg-neutral rounded-box">
+      <ng-container *ngIf="petPhotos$ | async as petPhotos; else noPetsPhotosMessage">
+        <ng-container *ngIf="petPhotos.length > 0; else noPetsPhotosMessage">
+          <ng-container *ngFor="let photo of petPhotos">
+            <div class="carousel-item">
+              <img [src]="photo.src" class="rounded-box">
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<section class="mt-2 w-full flex justify-center">
+  <div class="w-1/2 border-2 border-blue-500 rounded-md m-2 p-4 text-center">
+    <b>Adicione você também uma imagem do seu pet!</b>
+    <form 
+      class="flex flex-col justify-center" 
+      [formGroup]="addPetPhotoForm"
+    >
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">
+            Seu nome:
+            <span class="text-red-500">*</span>
+          </span>
+        </label>
+        <input
+          class="input input-bordered"
+          type="text"
+          formControlName="username"
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">
+            Nome do seu pet:
+            <span class="text-red-500">*</span>
+          </span>
+        </label>
+        <input
+          class="input input-bordered"
+          type="text" 
+          formControlName="petName"
+        />
+      </div>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">
+            Foto do seu pet:
+            <span class="text-red-500">*</span>
+          </span>
+        </label>
+        <div 
+          class="
+            w-full h-20 
+            border-4 border-blue-500 border-dashed rounded-lg
+            flex justify-center items-center
+            cursor-pointer
+            "
+            (click)="petPhotoUpload.click()"
+        >
+          <span class="
+            h-full flex items-center
+            text-blue-500 font-bold
+          ">
+            Adicionar Foto
+          </span>
+          
+        </div>
+        <input type="file" hidden formControlName="petPhoto" #petPhotoUpload />
+      </div>
+    </form>
+  </div>
+  
+</section>
+
+<ng-template #noPetsPhotosMessage>
+  <div class="text-white w-full text-center">
+    <p>Ainda não temos fotos de pets adicionados &#128532;</p>
+    <p>Preencha o formulário abaixo para adicionar uma foto &#57426;&#57423;</p>
+  </div>
+</ng-template>
