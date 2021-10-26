@@ -14,8 +14,15 @@
       <ng-container *ngIf="petPhotos$ | async as petPhotos; else noPetsPhotosMessage">
         <ng-container *ngIf="petPhotos.length > 0; else noPetsPhotosMessage">
           <ng-container *ngFor="let photo of petPhotos">
-            <div class="carousel-item">
-              <img [src]="photo.src" class="rounded-box">
+            <div class="carousel-item carousel-item__container">
+              <div class="w-full">
+                <img
+                  *ngIf="!photo.isLoading; else loadingTemplate"
+                  [src]="photo.src" 
+                  class="rounded-box w-full"
+                >
+              </div>
+              
             </div>
           </ng-container>
         </ng-container>
@@ -25,11 +32,12 @@
 </section>
 
 <section class="mt-2 w-full flex justify-center">
-  <div class="w-1/2 border-2 border-blue-500 rounded-md m-2 p-4 text-center">
+  <div class="w-full md:w-1/2 border-2 border-blue-500 rounded-md m-2 p-4 text-center">
     <b>Adicione você também uma imagem do seu pet!</b>
-    <form 
+    <form
       class="flex flex-col justify-center" 
       [formGroup]="addPetPhotoForm"
+      (ngSubmit)="addPetPhoto()"
     >
       <div class="form-control">
         <label class="label">
@@ -64,29 +72,76 @@
             <span class="text-red-500">*</span>
           </span>
         </label>
-        <div 
+        <div
+          *ngIf="addPetPhotoForm.get('petPhoto')?.value; else noPetPhotoAddedTemplate"
           class="
-            w-full h-20 
-            border-4 border-blue-500 border-dashed rounded-lg
-            flex justify-center items-center
-            cursor-pointer
-            "
-            (click)="petPhotoUpload.click()"
+            grid grid-cols-1
+            md:grid-cols-2 md:grid-rows-2
+          "
         >
-          <span class="
-            h-full flex items-center
-            text-blue-500 font-bold
-          ">
-            Adicionar Foto
-          </span>
-          
+          <div class="row-span-1 md:row-span-2">
+            <img [src]="(addPetPhotoForm.get('petPhotoSource')?.value | imageToBase64 | async) | safeValue">
+          </div>
+          <div class="row-span-1">
+            <button class="btn" (click)="petPhotoUpload.click()" type="button">
+              Trocar Foto
+            </button>
+          </div>
+          <div class="row-span-1">
+            <button 
+              class="btn" 
+              type="submit"
+              [disabled]="addPetPhotoForm.invalid"
+            >
+              Enviar Foto
+            </button>
+          </div>
         </div>
-        <input type="file" hidden formControlName="petPhoto" #petPhotoUpload />
+        <input 
+          type="file" 
+          accept="image/*" 
+          hidden 
+          formControlName="petPhoto" 
+          #petPhotoUpload
+          (change)="onPetPhotoChange($event)"
+        />
       </div>
     </form>
   </div>
-  
 </section>
+<section *ngIf="swPush.isEnabled && !(swPush.subscription | async)">
+  <div class="w-full flex justify-center mb-3">
+    <button class="w-full md:w-1/2 btn w-full" type="button" (click)="requestSubscription()">
+      Habilitar notificações
+    </button>
+  </div>
+</section>
+
+<ng-template #loadingTemplate>
+  <div class="w-full h-full">
+    <div class="loader"></div>
+  </div>
+</ng-template>
+
+<ng-template #noPetPhotoAddedTemplate>
+  <div 
+    class="
+      w-full h-20 
+      border-4 border-blue-500 border-dashed rounded-lg
+      flex justify-center items-center
+      cursor-pointer
+      "
+      (click)="petPhotoUpload.click()"
+  >
+    <span class="
+      h-full flex items-center
+      text-blue-500 font-bold
+    ">
+      Adicionar Foto
+    </span>
+    
+  </div>
+</ng-template>
 
 <ng-template #noPetsPhotosMessage>
   <div class="text-white w-full text-center">

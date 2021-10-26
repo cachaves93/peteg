@@ -1,12 +1,16 @@
 {
   "name": "peteg",
   "version": "0.0.0",
+  "main": "dist/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "ng build -c production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "cypress open"
   },
   "private": true,
   "dependencies": {

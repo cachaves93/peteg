@@ -7,10 +7,14 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ImageToBase64Pipe } from './pipes/image-to-base64.pipe';
+import { SafeValuePipe } from './pipes/safe-value.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ImageToBase64Pipe,
+    SafeValuePipe
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [],
+  providers: [ImageToBase64Pipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

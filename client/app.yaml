@@ -1,0 +1,14 @@
+service: default
+runtime: nodejs14
+
+handlers:
+  - url: /(.*\.(gif|png|jpg|css|js|ico|svg|webmanifest)(|\.map))$
+    static_files: dist/peteg/\1
+    upload: dist/peteg/(.*)(|\.map)
+
+  - url: /(.*)
+    static_files: dist/peteg/index.html
+    upload: dist/peteg/index.html
+
+automatic_scaling:
+  max_instances: 2
