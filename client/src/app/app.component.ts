@@ -10,6 +10,8 @@ import { SwPush } from '@angular/service-worker';
 interface PetPhoto {
   isLoading: boolean;
   src: string;
+  username: string;
+  petName: string;
 }
 
 interface AddPetPhotoRequest {
@@ -65,13 +67,15 @@ export class AppComponent implements OnInit {
         ...this.petPhotos$.getValue(),
         {
           isLoading: true,
-          src: ''
+          src: await this.imageToBase64Pipe.transformAsync(this.addPetPhotoForm.get('petPhotoSource')?.value),
+          username: this.addPetPhotoForm.get('username')?.value,
+          petName: this.addPetPhotoForm.get('petName')?.value
         }
       ]
     )
     this.addPetPhotoRequest(addPhotoRequest).pipe(take(1)).subscribe(
       (appMessage: AppMessage) => {
-        window.alert(appMessage);
+        window.alert(appMessage.message);
         this.petPhotos$.next(
           this.petPhotos$.getValue().map((petPhoto: PetPhoto) => {
             petPhoto.isLoading = false;
@@ -91,7 +95,6 @@ export class AppComponent implements OnInit {
   }
 
   requestSubscription(): void {
-    console.log('requisitou')
     this.swPush.requestSubscription(
       { serverPublicKey: 'BAC9Ci0uFiq9Z1G-wWg7Cb-5cAPpoBLmAKdn5JcdoWEOps_dHhgA3bideoBtQ9AMpXWLd9B6j-grqP6Bl1oWAu8' }
     ).then(

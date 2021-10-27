@@ -15,7 +15,7 @@ data_to_send = {
         u'body': 'Esperamos fotos dos seus pets =)',
         u'data': {
             'onActionClick': {
-                'default': { 
+                'default': {
                     u'operation': 'openWindow'
                 }
             }

@@ -10,7 +10,7 @@
     <span>Confira abaixo imagens dos pets da ETEG:</span>
   </div>
   <div class="w-full flex justify-center mt-3">
-    <div class="w-full max-w-lg p-4 space-x-4 carousel carousel-center bg-neutral rounded-box">
+    <div class="w-full max-w-lg p-4 space-x-4 carousel carousel-center bg-neutral rounded-box h-full">
       <ng-container *ngIf="petPhotos$ | async as petPhotos; else noPetsPhotosMessage">
         <ng-container *ngIf="petPhotos.length > 0; else noPetsPhotosMessage">
           <ng-container *ngFor="let photo of petPhotos">
@@ -19,8 +19,16 @@
                 <img
                   *ngIf="!photo.isLoading; else loadingTemplate"
                   [src]="photo.src" 
-                  class="rounded-box w-full"
+                  class="rounded-box w-full carousel-item__image"
                 >
+                <div class="text-white flex flex-col">
+                  <p>
+                    Nome: {{ photo.petName }}
+                  </p>
+                  <p>
+                    Tutor: {{photo.username }}
+                  </p>
+                </div>
               </div>
               
             </div>
@@ -82,14 +90,14 @@
           <div class="row-span-1 md:row-span-2">
             <img [src]="(addPetPhotoForm.get('petPhotoSource')?.value | imageToBase64 | async) | safeValue">
           </div>
-          <div class="row-span-1">
-            <button class="btn" (click)="petPhotoUpload.click()" type="button">
+          <div class="row-span-1 p-2">
+            <button class="btn w-full" (click)="petPhotoUpload.click()" type="button">
               Trocar Foto
             </button>
           </div>
-          <div class="row-span-1">
+          <div class="row-span-1 p-2">
             <button 
-              class="btn" 
+              class="btn w-full" 
               type="submit"
               [disabled]="addPetPhotoForm.invalid"
             >
@@ -145,7 +153,7 @@
 
 <ng-template #noPetsPhotosMessage>
   <div class="text-white w-full text-center">
-    <p>Ainda não temos fotos de pets adicionados &#128532;</p>
-    <p>Preencha o formulário abaixo para adicionar uma foto &#57426;&#57423;</p>
+    <p>Ainda não temos fotos de pets adicionados =/</p>
+    <p>Preencha o formulário abaixo para adicionar uma foto ;)</p>
   </div>
 </ng-template>
